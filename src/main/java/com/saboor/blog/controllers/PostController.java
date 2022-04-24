@@ -39,15 +39,20 @@ public class PostController {
         PostDto postDto = this.postService.getPostById(postId);
         return ResponseEntity.ok(postDto);
     }
-    @GetMapping("/")
-    public ResponseEntity<List<PostDto>> getPostById(){
-        return ResponseEntity.ok(this.postService.getAllPost());
+    @GetMapping("/user/{userId}/posts")
+    public ResponseEntity<List<PostDto>> getPostByUser(@PathVariable Integer userId){
+        List<PostDto> postDtos= this.postService.getAllPostByUser(userId);
+        return new ResponseEntity(postDtos,HttpStatus.OK);
     }
-    @GetMapping("/{categoryId}")
-    public ResponseEntity<List<PostDto>> getPostByCategory(@RequestBody CategoryDto categoryDto, @PathVariable Integer categoryId){
-        List<PostDto> postDtoByCategory = this.postService.getPostByCategory(categoryDto,categoryId);
-        return ResponseEntity.ok(this.postService.getAllPost());
+    @GetMapping("/category/{categoryId}/posts")
+    public ResponseEntity<List<PostDto>> getPostByCategory( @PathVariable Integer categoryId){
+        List<PostDto> postDtoByCategory = this.postService.getPostByCategory(categoryId);
+        return new ResponseEntity(postDtoByCategory,HttpStatus.OK);
     }
-
+    @GetMapping("/posts")
+    public ResponseEntity<List<PostDto>> getAllPosts(){
+        List<PostDto> posts = this.postService.getAllPost();
+        return new ResponseEntity(posts,HttpStatus.OK);
+    }
 
 }

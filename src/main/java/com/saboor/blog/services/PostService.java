@@ -12,7 +12,7 @@ public interface PostService {
     public void deletePost(Integer postId);
     public List<PostDto> getAllPost();
     public PostDto getPostById(Integer postId);
-    public List<PostDto> getPostByCategory(CategoryDto categoryDto,Integer categoryId);
+    public List<PostDto> getPostByCategory(Integer categoryId);
     public List<PostDto> getAllPostByUser(Integer userId);
     public List<PostDto> searchPosts(String keyword);
 }
