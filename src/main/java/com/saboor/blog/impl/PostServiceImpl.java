@@ -12,8 +12,10 @@ import com.saboor.blog.repositories.UserRepo;
 import com.saboor.blog.services.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,8 +54,6 @@ public class PostServiceImpl implements PostService {
         post.setContent(postDto.getContent());
         post.setAddedDate(postDto.getAddedDate());
         post.setImageName(postDto.getImageName());
-//        post.setUser(this.modelMapper.map((postDto.getUser()),User.class));
-//        post.setCategory(this.modelMapper.map((postDto.getCategory()),Category.class));
         Post updatedPost = this.postRepo.save(post);
         return this.modelMapper.map(updatedPost,PostDto.class);
     }
@@ -65,7 +65,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPost() {
+    public List<PostDto> getAllPost(Integer pageSize,Integer pageNumber) {
+        Pageable page =PageRequest.of(pageSize,pageNumber);
+        Page<Post> p = this.postRepo.findAll(page);
         List<Post> allPosts = this.postRepo.findAll();
         List<PostDto> allPostsDto = allPosts.stream().map((post) -> this.modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
         return allPostsDto;
@@ -78,16 +80,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getPostByCategory(CategoryDto categoryDto, Integer categoryId) {
-        Category category = this.modelMapper.map(categoryDto,Category.class);
-        List<Post> postByCategory = this.postRepo.findByCategory(category);
-        List<PostDto> postDtoByCategory = postByCategory.stream().map((post) ->this.modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
-        return postDtoByCategory;
+    public List<PostDto> getPostByCategory(Integer categoryId) {
+       Category category =  this.categoryRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category","Category ID",categoryId));
+        List<Post> postList = this.postRepo.findByCategory(category);
+        return postList.stream().map(post -> this.modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
     }
 
     @Override
     public List<PostDto> getAllPostByUser(Integer userId) {
-        return null;
+        User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","User ID",userId));
+        List<Post> postList = this.postRepo.findByUser(user);
+        return postList.stream().map(post -> this.modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
     }
 
     @Override
