@@ -4,6 +4,7 @@ import com.saboor.blog.entities.Post;
 import com.saboor.blog.payloads.ApiResponse;
 import com.saboor.blog.payloads.CategoryDto;
 import com.saboor.blog.payloads.PostDto;
+import com.saboor.blog.payloads.PostResponse;
 import com.saboor.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,11 +51,12 @@ public class PostController {
         return new ResponseEntity(postDtoByCategory,HttpStatus.OK);
     }
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam(value = "pageNumber",defaultValue = "1",required = false) Integer pageNumber
-                                                    ,@RequestParam(value = "pageSize", defaultValue = "5",required = false) Integer pageSize) {
+    public ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNumber",defaultValue = "1",required = false) Integer pageNumber
+                                                    , @RequestParam(value = "pageSize", defaultValue = "5",required = false) Integer pageSize
+                                                    , @RequestParam(value = "sortBy",defaultValue = "postID",required = false)String sortBy) {
 
-        List<PostDto> posts = this.postService.getAllPost(pageSize,pageNumber);
-        return new ResponseEntity(posts,HttpStatus.OK);
+        PostResponse allposts = this.postService.getAllPost(pageNumber,pageSize,sortBy);
+        return new ResponseEntity<PostResponse>(allposts,HttpStatus.OK);
     }
 
 }
