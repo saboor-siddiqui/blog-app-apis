@@ -1,5 +1,6 @@
 package com.saboor.blog.controllers;
 
+import com.saboor.blog.config.AppConstants;
 import com.saboor.blog.entities.Post;
 import com.saboor.blog.payloads.ApiResponse;
 import com.saboor.blog.payloads.CategoryDto;
@@ -51,9 +52,9 @@ public class PostController {
         return new ResponseEntity(postDtoByCategory,HttpStatus.OK);
     }
     @GetMapping("/posts")
-    public ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNumber",defaultValue = "1",required = false) Integer pageNumber
-                                                    , @RequestParam(value = "pageSize", defaultValue = "5",required = false) Integer pageSize
-                                                    , @RequestParam(value = "sortBy",defaultValue = "postID",required = false)String sortBy) {
+    public ResponseEntity<PostResponse> getAllPosts(@RequestParam(value = "pageNumber",defaultValue = AppConstants.PAGE_NUMBER,required = false) Integer pageNumber
+                                                    , @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE,required = false) Integer pageSize
+                                                    , @RequestParam(value = "sortBy",defaultValue = AppConstants.SORT_BY,required = false)String sortBy) {
 
         PostResponse allposts = this.postService.getAllPost(pageNumber,pageSize,sortBy);
         return new ResponseEntity<PostResponse>(allposts,HttpStatus.OK);
