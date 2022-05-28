@@ -2,13 +2,16 @@ package com.saboor.blog.controllers;
 
 import com.saboor.blog.payloads.JWTAuthRequest;
 import com.saboor.blog.payloads.JWTAuthResponse;
+import com.saboor.blog.payloads.UserDto;
 import com.saboor.blog.security.JWTTokenHelper;
+import com.saboor.blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +29,8 @@ public class AuthController {
     private UserDetailsService userDetailsService;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<JWTAuthResponse> createToken(@RequestBody JWTAuthRequest jwtAuthRequest) throws Exception {
@@ -45,5 +50,11 @@ public class AuthController {
             System.out.println("Invalid Details");
             throw new Exception("Invalid Username or password");
         }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> registerNewUser(@RequestBody UserDto userDto){
+        UserDto registeredUser = this.userService.registerNewUser(userDto);
+        return new ResponseEntity<>(registeredUser,HttpStatus.CREATED);
     }
 }
