@@ -44,7 +44,7 @@ public class SwaggerConfig {
     }
 
     private ApiInfo getInfo() {
-        return new ApiInfo("Blogging Application ; BackEnd Course","This project is developed by Saboor Siddiqui",
+        return new ApiInfo("Blogging Application : BackEnd Course","This project is developed by Saboor Siddiqui",
                            "1.0.0","Terms Of Service : None",new Contact("Saboor","https://www.saboorsiddiqui.com/","saboorsiddiqui0@gmail.com"),
                            "License Of APIs","API LICENSE URL", Collections.emptyList());
     }
